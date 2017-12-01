@@ -7,9 +7,10 @@ import java.util.*;
 
 class Client {
 	static final int MILLISECONDS = 30000;
+	static final int DATA = 1400;
 	static boolean TCP;
-	static final int SLEEPTIME = 100;
-	static final int WHENTOSLEEP = 100;
+	static final int SLEEPTIME = 10;
+	static final int WHENTOSLEEP = 5;
 	static final int PORT = 4711;
 	private static InetAddress ia;
 	private static int count = 0;
@@ -30,8 +31,8 @@ class Client {
         }
         sc.close();
 		
-		ia = InetAddress.getByName("10.179.15.93");
-		byte[] raw = new byte[1400];
+		ia = InetAddress.getByName("10.179.9.106");
+		byte[] raw = new byte[DATA];
 		raw[0] = 1;
 		if (TCP) {
 			tcpSend(raw);
@@ -58,7 +59,14 @@ class Client {
 				}
 
 			}
+			long timeEnd = System.currentTimeMillis();
+			double difTime = timeEnd - timeStart;
+			
 			System.out.printf("Packets send: %d %n", count);
+			System.out.printf("Data send: %d bytes %n", count * DATA);
+			System.out.printf("Time difference: %.2f s %n", difTime / 1000);
+			System.out.printf("Sendrate: %.0f kbits/s %n %n", (count * DATA / difTime) * 8);
+		
 
 		} catch (IOException e) {
 			System.out.println("Can´t connect to server.");
@@ -84,7 +92,14 @@ class Client {
 				}
 
 			}
+			long timeEnd = System.currentTimeMillis();
+			double difTime = timeEnd - timeStart;
+			
 			System.out.printf("Packets send: %d %n", count);
+			System.out.printf("Data send: %d bytes %n", count * DATA);
+			System.out.printf("Time difference: %.2f s %n", difTime / 1000);
+			System.out.printf("Sendrate: %.0f kbits/s %n %n", (count * DATA / difTime) * 8);
+		
 
 		} catch (SocketException e) {
 			System.out.println("Can´t connect to server.");
