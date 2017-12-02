@@ -31,6 +31,8 @@ public class Server {
 				udpReciever();
 		} catch (SocketException e) {
 			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("Can´t connect to server");
 		}
 	}
 
@@ -58,10 +60,11 @@ public class Server {
 						timeStart = System.currentTimeMillis();
 					}
 					count++;
-					System.out.printf("package no. %d from %s recieved %n", count, client.getInetAddress());
 					data += 1400;
 					timeForPackage = System.currentTimeMillis();
 					timeEnd = System.currentTimeMillis();
+					System.out.printf("package no. %d from %s recieved", count, client.getInetAddress());
+					System.out.printf(" time: %s %n", timeEnd - timeStart);
 				}
 				if (System.currentTimeMillis() - timeForPackage > timeout) {
 					System.out.println("Timeout!");
@@ -70,6 +73,7 @@ public class Server {
 
 			}
 			double difTime = timeEnd - timeStart;
+			System.out.printf(" time: %s %n", difTime);
 			if (count != 0) {
 				System.out.printf("Packets recieved: %d %n", count);
 				System.out.printf("Data recieved: %d bytes %n", data);
@@ -91,7 +95,7 @@ public class Server {
 		while (true) {
 			count = 0;
 			data = 0;
-			timeStart = System.currentTimeMillis();
+			
 			while (true) {
 				// wait for packet
 				DatagramPacket packet = new DatagramPacket(new byte[bytes], bytes);
@@ -103,7 +107,10 @@ public class Server {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-
+				if (count == 0) {
+					timeStart = System.currentTimeMillis();
+				}
+				timeEnd = System.currentTimeMillis();
 				count++;
 				// get data
 				InetAddress address = packet.getAddress();
@@ -111,11 +118,11 @@ public class Server {
 				System.out.printf("package no. %d from %s recieved %n", count, address);
 
 			}
-			timeEnd = System.currentTimeMillis();
-			double difTime = timeEnd - timeStart - timeout;
+			
+			double difTime = timeEnd - timeStart;
 			if (count != 0) {
 				System.out.printf("Packets recieved: %d %n", count);
-				System.out.printf("Data recieved: %d bytes %n", count * data);
+				System.out.printf("Data recieved: %d bytes %n", data);
 				System.out.printf("Time difference: %.2f s %n", difTime / 1000);
 				System.out.printf("Throughput: %.0f kbits/s %n %n", (data / difTime) * 8);
 			}

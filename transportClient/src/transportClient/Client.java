@@ -6,7 +6,7 @@ import java.net.*;
 import java.util.*;
 
 class Client {
-	static final int MILLISECONDS = 30000;
+	static final int MILLISECONDS = 2000;
 	static final int DATA = 1400;
 	static boolean TCP;
 	static final int SLEEPTIME = 10;
@@ -31,7 +31,7 @@ class Client {
         }
         sc.close();
 		
-		ia = InetAddress.getByName("10.179.9.106");
+		ia = InetAddress.getByName("localhost");
 		byte[] raw = new byte[DATA];
 		raw[0] = 1;
 		if (TCP) {
